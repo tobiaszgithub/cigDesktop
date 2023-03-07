@@ -5,6 +5,7 @@ import IntegrationFlowDetails from "./components/IntegrationFlows/IntegrationFlo
 import IntegrationPackagesTable from "./components/IntegrationPackages/IntegrationPackagesTable";
 import IntegrationPackageDetailsWithParam from "./components/IntegrationPackages/IntegrationPackageDetailsWithParam";
 import SettingsDetails from "./components/Settings/SettingsDetails";
+import StartPage from "./components/StartPage";
 
 const routes = [
   {
@@ -15,6 +16,10 @@ const routes = [
       {
         path: "/settings",
         element: <SettingsDetails />,
+      },
+      {
+        path: "/start",
+        element: <StartPage />,
       },
       {
         path: "packages",

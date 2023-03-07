@@ -3,8 +3,11 @@ package main
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
+	"os"
+	"path/filepath"
 
 	cigClient "github.com/tobiaszgithub/cig/client"
 	cigConfig "github.com/tobiaszgithub/cig/config"
@@ -104,4 +107,63 @@ func (a *App) TransportFlow(srcFlowID string, destFlowID string, destTenantKey s
 	}
 
 	return out.String(), err
+}
+
+//GetConfigurationFile Get Configuration File
+func (a *App) GetConfigurationFile() (cigConfig.ConfigurationFile, error) {
+	confAll := cigConfig.ConfigurationFile{}
+	// path, _ := os.Getwd()
+	// println("os.Getwd(): ", path)
+
+	configFile, err := os.Open("./config.json")
+	if err != nil {
+		homePath, _ := os.UserHomeDir()
+		configFilePath := filepath.Join(homePath, ".cig", "config.json")
+		log.Println("Config file path: ", configFilePath)
+		configFile, err = os.Open(configFilePath)
+		if err != nil {
+			err = fmt.Errorf("error opening config.json: %w", err)
+			return confAll, err
+		}
+
+	}
+
+	defer configFile.Close()
+
+	err = json.NewDecoder(configFile).Decode(&confAll)
+	if err != nil {
+		return confAll, err
+	}
+
+	return confAll, err
+}
+
+//SaveConfigurationFile Save Configuration File
+func (a *App) SaveConfigurationFile(config cigConfig.ConfigurationFile) error {
+
+	homePath, _ := os.UserHomeDir()
+	configDir := filepath.Join(homePath, ".cig")
+	err := os.MkdirAll(configDir, os.ModePerm)
+	if err != nil {
+		return err
+	}
+
+	configFilePath := filepath.Join(homePath, ".cig", "config.json")
+
+	configFile, err := os.OpenFile(configFilePath, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
+	if err != nil {
+		return err
+	}
+	defer configFile.Close()
+
+	enc := json.NewEncoder(configFile)
+	enc.SetIndent("", "\t")
+
+	err = enc.Encode(config)
+	if err != nil {
+		return err
+	}
+
+	return nil
+
 }

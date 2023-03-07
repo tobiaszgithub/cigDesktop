@@ -1,3 +1,96 @@
+export namespace config {
+	
+	export class Authorization {
+	    type: string;
+	    username: string;
+	    password: string;
+	    clientID: string;
+	    clientSecret: string;
+	    tokenURL: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new Authorization(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.type = source["type"];
+	        this.username = source["username"];
+	        this.password = source["password"];
+	        this.clientID = source["clientID"];
+	        this.clientSecret = source["clientSecret"];
+	        this.tokenURL = source["tokenURL"];
+	    }
+	}
+	export class Configuration {
+	    key: string;
+	    apiURL: string;
+	    authorization: Authorization;
+	
+	    static createFrom(source: any = {}) {
+	        return new Configuration(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.key = source["key"];
+	        this.apiURL = source["apiURL"];
+	        this.authorization = this.convertValues(source["authorization"], Authorization);
+	    }
+	
+		convertValues(a: any, classs: any, asMap: boolean = false): any {
+		    if (!a) {
+		        return a;
+		    }
+		    if (a.slice) {
+		        return (a as any[]).map(elem => this.convertValues(elem, classs));
+		    } else if ("object" === typeof a) {
+		        if (asMap) {
+		            for (const key of Object.keys(a)) {
+		                a[key] = new classs(a[key]);
+		            }
+		            return a;
+		        }
+		        return new classs(a);
+		    }
+		    return a;
+		}
+	}
+	export class ConfigurationFile {
+	    activeTenantKey: string;
+	    tenants: Configuration[];
+	
+	    static createFrom(source: any = {}) {
+	        return new ConfigurationFile(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.activeTenantKey = source["activeTenantKey"];
+	        this.tenants = this.convertValues(source["tenants"], Configuration);
+	    }
+	
+		convertValues(a: any, classs: any, asMap: boolean = false): any {
+		    if (!a) {
+		        return a;
+		    }
+		    if (a.slice) {
+		        return (a as any[]).map(elem => this.convertValues(elem, classs));
+		    } else if ("object" === typeof a) {
+		        if (asMap) {
+		            for (const key of Object.keys(a)) {
+		                a[key] = new classs(a[key]);
+		            }
+		            return a;
+		        }
+		        return new classs(a);
+		    }
+		    return a;
+		}
+	}
+
+}
+
 export namespace main {
 	
 	export class Address {

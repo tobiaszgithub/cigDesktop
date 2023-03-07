@@ -26,45 +26,22 @@ const items = [
   getItem("Systems", "systems", <ApiOutlined />, [
     getItem(
       <Link to={"systems/cloud-foundry-dev-basic"}>cloud-foundry-dev-basic</Link>,
-      "1"
+      "cloud-foundry-dev-basic"
     ),
     getItem(
       <Link to={"systems/hic-neo-dev"}>hic-neo-dev</Link>,
-      "2"
+      "hic-neo-dev"
     ),
     getItem(
       <Link to={"systems/cloud-foundry-dev"}>cloud-foundry-dev</Link>,
-      "3"
+      "cloud-foundry-dev"
     ),
     getItem(
       <Link to={"systems/hr-camp-sonova-neo-dev"}>hr-camp-sonova-neo-dev</Link>,
-      "3"
+      "hr-camp-sonova-neo-dev"
     ),
   ]),
-  getItem("Private Actions", "sub2", <LockOutlined />, [
-    getItem(
-      "Repositories",
-      "g3",
-      null,
-      [
-        getItem(
-          <Link to={"repositories/private"}>View my repositories</Link>,
-          "5"
-        ),
-      ],
-      "group"
-    ),
-    getItem(
-      "Gists",
-      "g4",
-      null,
-      [
-        getItem(<Link to={"gists/private"}>View my gists</Link>, "6"),
-        getItem(<Link to={"gist/new"}>Create new gist</Link>, "7"),
-      ],
-      "group"
-    ),
-  ]),
+
 ];
 
 const TenantsMenu = () => {
@@ -72,7 +49,7 @@ const TenantsMenu = () => {
     <Layout.Sider theme="light" style={{ background: "white" }}>
 
       <Menu
-        defaultSelectedKeys={["1"]}
+        // defaultSelectedKeys={["settings"]}
         mode="inline"
         items={items}
         style={{ width: 256 }}

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from 'react-router-dom';
 import { InspectFlow } from "../../../wailsjs/go/main/App";
 
-import { Avatar, Button, Card, Divider, List, Spin, Timeline, Typography } from "antd";
+import { Avatar, Button, Card, Divider, List, Spin, Timeline, Typography,message } from "antd";
 import TransportIntegrationFlow from "./TransportIntegrationFlow";
 import IntegrationFlowOverview from "./IntegrationFlowOverview";
 const tabList = [
@@ -20,6 +20,7 @@ const tabList = [
 
 const IntegrationFlowDetails = () => {
   const { integrationFlow } = useParams();
+  const [messageApi, contextHolder] = message.useMessage();
   console.log("IntegrationFlowDetails: ", integrationFlow)
   const [flow, setFlow] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
