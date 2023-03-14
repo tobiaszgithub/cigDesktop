@@ -16,4 +16,6 @@ export function InspectFlow(arg1:string):Promise<model.IntegrationFlow>;
 
 export function SaveConfigurationFile(arg1:config.ConfigurationFile):Promise<void>;
 
+export function SetTenantKey(arg1:string):Promise<void>;
+
 export function TransportFlow(arg1:string,arg2:string,arg3:string,arg4:string,arg5:string):Promise<string>;

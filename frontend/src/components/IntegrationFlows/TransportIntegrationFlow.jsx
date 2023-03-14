@@ -1,10 +1,11 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, Card, Divider, Form, Input, message, Switch,Spin } from "antd";
+import { Button, Card, Divider, Form, Input, message, Switch, Spin, Select } from "antd";
 import { useEffect, useState } from "react";
 import { TransportFlow } from "../../../wailsjs/go/main/App";
+import { maxHeight, maxWidth } from "@mui/system";
 
-const TransportIntegrationFlow = ({ integrationFlow }) => {
+const TransportIntegrationFlow = ({ integrationFlow, configuration }) => {
   const [messageApi, contextHolder] = message.useMessage();
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -12,6 +13,13 @@ const TransportIntegrationFlow = ({ integrationFlow }) => {
 
   const [form] = Form.useForm();
   useEffect(() => form.resetFields(), [integrationFlow]);
+
+  const tenants = configuration.tenants.map((tenant) => {
+    return {
+      value: tenant.key,
+      label: tenant.key
+    }
+  })
 
   const onFinish = async (values) => {
     const { description, isPublic, srcFlowID, destFlowID, destTenantKey, destFlowName, destPackageID } = values;
@@ -84,11 +92,13 @@ const TransportIntegrationFlow = ({ integrationFlow }) => {
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             autoComplete="off"
+            style={{ maxWidth: 600 }}
             layout="vertical"
+            size="middle"
             initialValues={{
               'srcFlowID': integrationFlow.Id,
               'destFlowID': integrationFlow.Id,
-              'destTenantKey': 'cloud-foundry-dev-basic',
+              'destTenantKey': configuration.activeTenantKey,
               'destFlowName': integrationFlow.Name,
               'destPackageID': integrationFlow.PackageId,
             }}
@@ -100,7 +110,13 @@ const TransportIntegrationFlow = ({ integrationFlow }) => {
               <Input />
             </Form.Item>
             <Form.Item label="Destination TenantKey" name="destTenantKey">
-              <Input />
+              {/* <Input /> */}
+              <Select
+                options={tenants}
+              >
+
+
+              </Select>
             </Form.Item>
             <Form.Item label="Destination Flow Name" name="destFlowName">
               <Input />

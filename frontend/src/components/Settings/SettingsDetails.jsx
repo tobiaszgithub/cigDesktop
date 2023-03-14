@@ -244,7 +244,7 @@ const SettingsDetails = () => {
                         label="password"
                         rules={[{ required: false }]}
                       >
-                        <Input placeholder="password" />
+                        <Input.Password placeholder="password" />
                       </Form.Item>
 
                       <Form.Item

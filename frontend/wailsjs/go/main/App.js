@@ -26,6 +26,10 @@ export function SaveConfigurationFile(arg1) {
   return window['go']['main']['App']['SaveConfigurationFile'](arg1);
 }
 
+export function SetTenantKey(arg1) {
+  return window['go']['main']['App']['SetTenantKey'](arg1);
+}
+
 export function TransportFlow(arg1, arg2, arg3, arg4, arg5) {
   return window['go']['main']['App']['TransportFlow'](arg1, arg2, arg3, arg4, arg5);
 }

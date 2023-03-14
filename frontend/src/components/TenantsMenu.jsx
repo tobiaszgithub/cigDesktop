@@ -12,39 +12,41 @@ function getItem(label, key, icon, children, type) {
     type,
   };
 }
-const items = [
-  getItem(
-    <Link to={"/start"}>Start</Link>,
-    "start",
-    <HomeOutlined />,
-    null),
-  getItem(
-    <Link to={"/settings"}>Settings</Link>,
-    "settings",
-    <SettingOutlined />,
-    null),
-  getItem("Systems", "systems", <ApiOutlined />, [
-    getItem(
-      <Link to={"systems/cloud-foundry-dev-basic"}>cloud-foundry-dev-basic</Link>,
-      "cloud-foundry-dev-basic"
-    ),
-    getItem(
-      <Link to={"systems/hic-neo-dev"}>hic-neo-dev</Link>,
-      "hic-neo-dev"
-    ),
-    getItem(
-      <Link to={"systems/cloud-foundry-dev"}>cloud-foundry-dev</Link>,
-      "cloud-foundry-dev"
-    ),
-    getItem(
-      <Link to={"systems/hr-camp-sonova-neo-dev"}>hr-camp-sonova-neo-dev</Link>,
-      "hr-camp-sonova-neo-dev"
-    ),
-  ]),
 
-];
 
-const TenantsMenu = () => {
+const TenantsMenu = ({ configuration }) => {
+
+
+  console.log("TenantMenu: Configuration: ")
+  console.log(configuration)
+  let tenants = []
+  if (configuration['tenants']) {
+    tenants = configuration.tenants.map((tenant) => {
+      return getItem(
+        <Link to={`tenants/${tenant.key}`}>{tenant.key}</Link>,
+        tenant.key
+
+      )
+    })
+  }
+
+
+  const items = [
+    getItem(
+      <Link to={"/start"}>Start</Link>,
+      "start",
+      <HomeOutlined />,
+      null),
+    getItem(
+      <Link to={"/settings"}>Settings</Link>,
+      "settings",
+      <SettingOutlined />,
+      null),
+    getItem("Tenants", "tenants", <ApiOutlined />, tenants),
+
+  ];
+
+
   return (
     <Layout.Sider theme="light" style={{ background: "white" }}>
 
@@ -53,6 +55,7 @@ const TenantsMenu = () => {
         mode="inline"
         items={items}
         style={{ width: 256 }}
+        defaultOpenKeys={['tenants']}
       />
     </Layout.Sider>
   );

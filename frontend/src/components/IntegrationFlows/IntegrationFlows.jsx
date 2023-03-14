@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { GetFlowsOfIntegrationPackage } from "../../../wailsjs/go/main/App";
 import { Space, Table, Tag, Spin } from 'antd';
 import { Link } from 'react-router-dom';
-
+import { useParams } from 'react-router-dom';
 
 
 const IntegrationFlows = ({ integrationPackageId }) => {
@@ -10,19 +10,15 @@ const IntegrationFlows = ({ integrationPackageId }) => {
   const [flows, setFlows] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [filters, setFilters] = useState([])
+  const { tenantKey } = useParams();
 
   const columns = [
-    {
-      title: 'Description',
-      dataIndex: 'Description',
-      key: 'description',
-    },
     {
       title: 'Id',
       dataIndex: 'Id',
       key: 'id',
       render: (id) => (
-        <Link to={`/packages/${integrationPackageId}/integrationFlows/${id}`}>
+        <Link to={`/tenants/${tenantKey}/packages/${integrationPackageId}/integrationFlows/${id}`}>
           {id}
         </Link>
       ),
@@ -36,6 +32,12 @@ const IntegrationFlows = ({ integrationPackageId }) => {
       key: 'name',
       onFilter: (value, record) => record.Name.indexOf(value) === 0,
 
+    },
+    {
+      title: 'Description',
+      dataIndex: 'Description',
+      key: 'description',
+      ellipsis: true,
     },
     {
       title: 'PackageId',
@@ -78,7 +80,6 @@ const IntegrationFlows = ({ integrationPackageId }) => {
     <>
       <Spin tip="Loading" spinning={isLoading}>
         <Table columns={columns} dataSource={flows} />
-        <div>test from IntegrationFlows</div>
       </Spin>
 
     </>

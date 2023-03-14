@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
-import { GetIntegrationPackages } from "../../../wailsjs/go/main/App";
+import { GetIntegrationPackages, SetTenantKey } from "../../../wailsjs/go/main/App";
 import { Space, Table, Tag, Spin } from 'antd';
 import { Link } from 'react-router-dom';
 import type { ColumnsType } from 'antd/es/table';
-
+import { useParams } from 'react-router-dom';
+import { Typography } from 'antd';
+const { Title } = Typography;
 interface DataType {
   key: React.Key;
   Id: string;
@@ -19,7 +21,7 @@ interface DataType {
 
 
 const IntegrationPackagesTable = () => {
-
+  const { tenantKey } = useParams();
   const [packages, setPackages] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [filters, setFilters] = useState([])
@@ -32,7 +34,7 @@ const IntegrationPackagesTable = () => {
       key: 'Id',
       width: 300,
       render: (id: string) => (
-        <Link to={`/packages/${id}`}>
+        <Link to={`/tenants/${tenantKey}/packages/${id}`}>
           {id}
         </Link>
       ),
@@ -109,7 +111,8 @@ const IntegrationPackagesTable = () => {
   useEffect(() => {
     const getPackages = async () => {
       setIsLoading(true);
-
+      
+      await SetTenantKey(tenantKey);
       const packages: any = await GetIntegrationPackages();
 
       setPackages(packages);
@@ -127,13 +130,13 @@ const IntegrationPackagesTable = () => {
       console.log(packages)
     };
     getPackages();
-  }, []);
+  }, [tenantKey]);
 
   return (
     <>
+      <Title level={5}>Integration Packages:</Title>
       <Spin tip="Loading" spinning={isLoading}>
         <Table columns={columns} dataSource={packages} pagination={{ pageSize: 25 }} scroll={{ x: 1500}}/>
-        <div>test from IntegraionPackagesTable</div>
       </Spin>
 
     </>

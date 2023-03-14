@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from 'react-router-dom';
-import { InspectFlow } from "../../../wailsjs/go/main/App";
+import { InspectFlow, GetConfigurationFile } from "../../../wailsjs/go/main/App";
 
-import { Avatar, Button, Card, Divider, List, Spin, Timeline, Typography,message } from "antd";
+import { Avatar, Button, Card, Divider, List, Spin, Timeline, Typography, message } from "antd";
 import TransportIntegrationFlow from "./TransportIntegrationFlow";
 import IntegrationFlowOverview from "./IntegrationFlowOverview";
 const tabList = [
@@ -23,6 +23,7 @@ const IntegrationFlowDetails = () => {
   const [messageApi, contextHolder] = message.useMessage();
   console.log("IntegrationFlowDetails: ", integrationFlow)
   const [flow, setFlow] = useState([]);
+  const [configuration, setConfiguration] = useState({})
   const [isLoading, setIsLoading] = useState(true);
   const [activeTabKey1, setActiveTabKey1] = useState('overviewTab');
   const onTab1Change = (key) => {
@@ -30,7 +31,7 @@ const IntegrationFlowDetails = () => {
   };
   const contentList = {
     overviewTab: <IntegrationFlowOverview integrationFlow={flow} />,
-    transportTab: <TransportIntegrationFlow integrationFlow={flow} />,
+    transportTab: <TransportIntegrationFlow integrationFlow={flow} configuration={configuration} />,
   };
 
   useEffect(() => {
@@ -48,18 +49,40 @@ const IntegrationFlowDetails = () => {
             type: "error",
             content: error,
           });
+          setIsLoading(false);
         });
 
 
     };
+
+    const getConfiguration = async () => {
+      setIsLoading(true);
+      GetConfigurationFile()
+        .then((config) => {
+          console.log("configuration file:");
+          console.log(config);
+          setConfiguration(config)
+
+        })
+        .catch((error) => {
+          messageApi.open({
+            type: "error",
+            content: error,
+          });
+          setIsLoading(false);
+        });
+    }
+    getConfiguration();
     getFlow();
+
+
   }, []);
 
   return (
     <>
-      <div>In the integraion flow: {integrationFlow}</div>
+
       <Card
-        title={flow.Name}
+        title={"Flow Name: " + flow.Name}
         bordered={false}
         style={{
           margin: "1%",

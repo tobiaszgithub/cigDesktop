@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import IntegrationFlows from "../IntegrationFlows/IntegrationFlows";
+import { Typography } from 'antd';
+const { Title } = Typography;
 
 const IntegrationPackageDetails = ({ integrationPackage }) => {
 
   return (
     <>
-      <div>test from PackageDetails</div>
+      <Title level={3}>test from PackageDetails</Title>
       <IntegrationFlows integrationPackageId={integrationPackage.Id} />
     </>
 

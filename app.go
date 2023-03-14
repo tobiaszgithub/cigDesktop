@@ -48,6 +48,13 @@ func (a *App) Greet(p Person) string {
 	return fmt.Sprintf("Hello %s (Age: %d)!", p.Name, p.Age)
 }
 
+//SetTenantKey set TenantKey
+func (a *App) SetTenantKey(tenantKey string) error {
+
+	TenantKey = tenantKey
+	return nil
+}
+
 //GetIntegrationPackages Get IntegrationFlows
 func (a *App) GetIntegrationPackages() ([]model.IntegrationPackage, error) {
 	conf, err := cigConfig.NewConfiguration(TenantKey)

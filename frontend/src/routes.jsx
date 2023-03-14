@@ -26,11 +26,23 @@ const routes = [
         element: <IntegrationPackagesTable />,
       },
       {
-        path: "/packages/:integrationPackage",
+        path: "/tenants/:tenantKey/packages",
+        element: <IntegrationPackagesTable />,
+      },
+      {
+        path: "/tenants/",
+        element: <div>Tenants:</div>,
+      },
+      {
+        path: "/tenants/:tenantKey",
+        element: <IntegrationPackagesTable />,
+      },
+      {
+        path: "/tenants/:tenantKey/packages/:integrationPackage",
         element: <IntegrationPackageDetailsWithParam />,
       },
       {
-        path: "/packages/:integrationPackage/integrationFlows",
+        path: "/tenants/:tenantKey/packages/:integrationPackage/integrationFlows",
         element: <IntegrationPackageDetailsWithParam />,
       },
       {
@@ -38,7 +50,7 @@ const routes = [
         element: <IntegrationFlowDetails />,
       },
       {
-        path: "/packages/:integrationPackage/integrationFlows/:integrationFlow",
+        path: "/tenants/:tenantKey/packages/:integrationPackage/integrationFlows/:integrationFlow",
         element: <IntegrationFlowDetails />,
       },
 

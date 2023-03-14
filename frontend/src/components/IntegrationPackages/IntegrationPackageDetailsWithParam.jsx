@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import IntegrationFlows from "../IntegrationFlows/IntegrationFlows";
 import { useParams } from 'react-router-dom';
+import { Typography } from 'antd';
+const { Title } = Typography;
 
 const IntegrationPackageDetailsWithParam = () => {
   const { integrationPackage } = useParams();
@@ -8,7 +10,7 @@ const IntegrationPackageDetailsWithParam = () => {
   console.log("IntegrationPackageDetailsWithParam: ", integrationPackage)
   return (
     <>
-      <div>test from PackageDetails{integrationPackage}</div>
+      <Title level={5}>Integration Flows:</Title>
       <IntegrationFlows integrationPackageId={integrationPackage} />
     </>
 
