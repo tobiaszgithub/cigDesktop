@@ -177,6 +177,10 @@ export namespace model {
 	    Description: string;
 	    Sender: string;
 	    Receiver: string;
+	    CreatedBy: string;
+	    CreatedAt: string;
+	    ModifiedBy: string;
+	    ModifiedAt: string;
 	
 	    static createFrom(source: any = {}) {
 	        return new IntegrationFlow(source);
@@ -192,6 +196,10 @@ export namespace model {
 	        this.Description = source["Description"];
 	        this.Sender = source["Sender"];
 	        this.Receiver = source["Receiver"];
+	        this.CreatedBy = source["CreatedBy"];
+	        this.CreatedAt = source["CreatedAt"];
+	        this.ModifiedBy = source["ModifiedBy"];
+	        this.ModifiedAt = source["ModifiedAt"];
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {
