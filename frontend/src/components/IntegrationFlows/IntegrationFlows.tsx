@@ -91,7 +91,19 @@ const IntegrationFlows = ({ integrationPackageId }: IntegrationFlowsProps) => {
       key: 'description',
       ellipsis: true,
     },
-
+    {
+      title: 'Action',
+      key: 'action',
+      render: (_, record) => (
+        <Space size="middle">
+          {/* <a>Invite {record.}</a> */}
+          <Link to={`/tenants/${tenantKey}/packages/${integrationPackageId}/integrationFlows/${record.Id}?action=transport`}>
+            Transport
+          </Link>
+          
+        </Space>
+      )
+    }
 
   ];
 

@@ -2,9 +2,10 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Card, Divider, Form, Input, message, Switch, Spin, Select } from "antd";
 import { useEffect, useState } from "react";
-import { TransportFlow, GetIntegrationPackages,SetTenantKey } from "../../../wailsjs/go/main/App";
+import { TransportFlow, GetIntegrationPackages, SetTenantKey } from "../../../wailsjs/go/main/App";
 import { maxHeight, maxWidth } from "@mui/system";
 import { model } from "../../../wailsjs/go/models";
+import { BaseOptionType } from "antd/es/select";
 
 type transportProps = {
   integrationFlow: model.IntegrationFlow,
@@ -17,16 +18,17 @@ type transportProps = {
 const TransportIntegrationFlow = ({ integrationFlow, configuration }: transportProps) => {
   const [messageApi, contextHolder] = message.useMessage();
   const [isLoading, setIsLoading] = useState(false);
+  const [tenants, setTenants] = useState([]);
   const navigate = useNavigate();
   console.log("TransportIntegraionFlow: ", integrationFlow)
-  const [destTenantKey, setDestTenantKey] = useState(configuration.activeTenantKey)
+  const [destTenantKey, setDestTenantKey] = useState('')
   const [form] = Form.useForm();
   useEffect(() => form.resetFields(), [integrationFlow]);
 
-
   const [destPackages, setDestPackages] = useState(Array<model.IntegrationPackage>);
-  
+
   const getPackages = async () => {
+
     setIsLoading(true);
 
     //await SetTenantKey(destTenantKey || '');
@@ -48,22 +50,27 @@ const TransportIntegrationFlow = ({ integrationFlow, configuration }: transportP
   };
 
   useEffect(() => {
+    if (destTenantKey === '') {
+      setDestPackages([])
 
-    getPackages();
+    } else {
+      getPackages();
+    }
+
   }, [destTenantKey]);
 
-  const handleDestTenantChange = (value:string) => {
+  const handleDestTenantChange = (value: string) => {
     setDestTenantKey(value)
     //getPackages()
 
   }
 
-  const tenants = configuration.tenants.map((tenant) => {
-    return {
-      value: tenant.key,
-      label: tenant.key
-    }
-  })
+  // const tenants = configuration.tenants.map((tenant) => {
+  //   return {
+  //     value: tenant.key,
+  //     label: tenant.key
+  //   }
+  // })
 
   const onFinish = async (values: { description: string; isPublic: string; srcFlowID: string; destFlowID: string; destTenantKey: string; destFlowName: string; destPackageID: string; }) => {
     const { description, isPublic, srcFlowID, destFlowID, destTenantKey, destFlowName, destPackageID } = values;
@@ -156,7 +163,12 @@ const TransportIntegrationFlow = ({ integrationFlow, configuration }: transportP
             <Form.Item label="Destination TenantKey" name="destTenantKey">
               {/* <Input /> */}
               <Select
-                options={tenants}
+                options={configuration.tenants.map((tenant) => {
+                  return {
+                    value: tenant.key,
+                    label: tenant.key
+                  }
+                })}
                 onChange={handleDestTenantChange}
               >
 

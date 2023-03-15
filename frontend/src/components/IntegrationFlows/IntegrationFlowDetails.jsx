@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { InspectFlow, GetConfigurationFile } from "../../../wailsjs/go/main/App";
 
 import { Avatar, Button, Card, Divider, List, Spin, Timeline, Typography, message } from "antd";
@@ -20,10 +20,15 @@ const tabList = [
 
 const IntegrationFlowDetails = () => {
   const { integrationFlow } = useParams();
+  const [searchParams] = useSearchParams();
+  console.log(searchParams.get('action'))
   const [messageApi, contextHolder] = message.useMessage();
   console.log("IntegrationFlowDetails: ", integrationFlow)
   const [flow, setFlow] = useState([]);
-  const [configuration, setConfiguration] = useState({})
+  const [configuration, setConfiguration] = useState({
+    tenants: [],
+    activeTenantKey: ""
+  })
   const [isLoading, setIsLoading] = useState(true);
   const [activeTabKey1, setActiveTabKey1] = useState('overviewTab');
   const onTab1Change = (key) => {
@@ -74,7 +79,9 @@ const IntegrationFlowDetails = () => {
     }
     getConfiguration();
     getFlow();
-
+    if (searchParams.get('action') === "transport") {
+      setActiveTabKey1('transportTab')
+    }
 
   }, []);
 
