@@ -10,8 +10,8 @@ export function GetFlowsOfIntegrationPackage(arg1) {
   return window['go']['main']['App']['GetFlowsOfIntegrationPackage'](arg1);
 }
 
-export function GetIntegrationPackages() {
-  return window['go']['main']['App']['GetIntegrationPackages']();
+export function GetIntegrationPackages(arg1) {
+  return window['go']['main']['App']['GetIntegrationPackages'](arg1);
 }
 
 export function Greet(arg1) {

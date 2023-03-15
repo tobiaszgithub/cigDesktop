@@ -51,6 +51,7 @@ const IntegrationFlows = ({ integrationPackageId }: IntegrationFlowsProps) => {
       title: 'Version',
       dataIndex: 'Version',
       key: 'version',
+      width: 80,
     },
     {
       title: 'CreatedBy',

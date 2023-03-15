@@ -11,7 +11,7 @@ const IntegrationPackages = () => {
 
   useEffect(() => {
     const getPackages = async () => {
-      GetIntegrationPackages()
+      GetIntegrationPackages("")
         .then((packages) => {
           console.log("integration packages:")
           console.log(packages);

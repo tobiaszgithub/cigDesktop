@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import type { ColumnsType } from 'antd/es/table';
 import { useParams } from 'react-router-dom';
 import { Typography } from 'antd';
+import { ColumnFilterItem } from "antd/es/table/interface";
 const { Title } = Typography;
 // interface DataType {
 //   key: React.Key;
@@ -25,7 +26,7 @@ const IntegrationPackagesTable = () => {
   const { tenantKey } = useParams();
   const [packages, setPackages] = useState(Array<model.IntegrationPackage>);
   const [isLoading, setIsLoading] = useState(true);
-  const [filters, setFilters] = useState([])
+  const [filters, setFilters] = useState(Array<ColumnFilterItem>)
 
   const columns: ColumnsType<model.IntegrationPackage> = [
 
@@ -57,6 +58,7 @@ const IntegrationPackagesTable = () => {
       title: 'Version',
       dataIndex: 'Version',
       key: 'Version',
+      width: 80,
     },
     {
       title: 'CreatedBy',
@@ -110,12 +112,13 @@ const IntegrationPackagesTable = () => {
       setIsLoading(true);
 
       await SetTenantKey(tenantKey || '');
-      const packages: any = await GetIntegrationPackages();
+      console.log("IntegrationPackageTables: " + tenantKey)
+      const packages = await GetIntegrationPackages(tenantKey || '');
 
       setPackages(packages);
 
       setFilters(packages.map((item: { Id: string; }) => {
-        const key = item.Id.split(' ')[0]
+        const key = item.Id;
         return {
           text: key,
           value: key

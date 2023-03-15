@@ -56,8 +56,12 @@ func (a *App) SetTenantKey(tenantKey string) error {
 }
 
 //GetIntegrationPackages Get IntegrationFlows
-func (a *App) GetIntegrationPackages() ([]model.IntegrationPackage, error) {
-	conf, err := cigConfig.NewConfiguration(TenantKey)
+func (a *App) GetIntegrationPackages(tenantKey string) ([]model.IntegrationPackage, error) {
+	if tenantKey == "" {
+		tenantKey = TenantKey
+	}
+
+	conf, err := cigConfig.NewConfiguration(tenantKey)
 	if err != nil {
 		log.Print(err)
 		return []model.IntegrationPackage{}, err

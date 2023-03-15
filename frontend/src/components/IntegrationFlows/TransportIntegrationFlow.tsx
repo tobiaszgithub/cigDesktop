@@ -2,17 +2,61 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Card, Divider, Form, Input, message, Switch, Spin, Select } from "antd";
 import { useEffect, useState } from "react";
-import { TransportFlow } from "../../../wailsjs/go/main/App";
+import { TransportFlow, GetIntegrationPackages,SetTenantKey } from "../../../wailsjs/go/main/App";
 import { maxHeight, maxWidth } from "@mui/system";
+import { model } from "../../../wailsjs/go/models";
 
-const TransportIntegrationFlow = ({ integrationFlow, configuration }) => {
+type transportProps = {
+  integrationFlow: model.IntegrationFlow,
+  configuration: {
+    activeTenantKey: string
+    tenants: { key: string }[]
+  }
+}
+
+const TransportIntegrationFlow = ({ integrationFlow, configuration }: transportProps) => {
   const [messageApi, contextHolder] = message.useMessage();
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   console.log("TransportIntegraionFlow: ", integrationFlow)
-
+  const [destTenantKey, setDestTenantKey] = useState(configuration.activeTenantKey)
   const [form] = Form.useForm();
   useEffect(() => form.resetFields(), [integrationFlow]);
+
+
+  const [destPackages, setDestPackages] = useState(Array<model.IntegrationPackage>);
+  
+  const getPackages = async () => {
+    setIsLoading(true);
+
+    //await SetTenantKey(destTenantKey || '');
+    const packages = await GetIntegrationPackages(destTenantKey);
+
+    setDestPackages(packages);
+
+    // setFilters(packages.map((item: { Id: string; }) => {
+    //   const key = item.Id.split(' ')[0]
+    //   return {
+    //     text: key,
+    //     value: key
+    //   }
+    // }))
+
+    setIsLoading(false);
+    console.log("integraion packages:")
+    console.log(packages)
+  };
+
+  useEffect(() => {
+
+    getPackages();
+  }, [destTenantKey]);
+
+  const handleDestTenantChange = (value:string) => {
+    setDestTenantKey(value)
+    //getPackages()
+
+  }
 
   const tenants = configuration.tenants.map((tenant) => {
     return {
@@ -21,7 +65,7 @@ const TransportIntegrationFlow = ({ integrationFlow, configuration }) => {
     }
   })
 
-  const onFinish = async (values) => {
+  const onFinish = async (values: { description: string; isPublic: string; srcFlowID: string; destFlowID: string; destTenantKey: string; destFlowName: string; destPackageID: string; }) => {
     const { description, isPublic, srcFlowID, destFlowID, destTenantKey, destFlowName, destPackageID } = values;
     setIsLoading(true);
     const transport = {
@@ -77,7 +121,7 @@ const TransportIntegrationFlow = ({ integrationFlow, configuration }) => {
     //   });
   };
 
-  const onFinishFailed = (errorInfo) => {
+  const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
   };
 
@@ -98,7 +142,7 @@ const TransportIntegrationFlow = ({ integrationFlow, configuration }) => {
             initialValues={{
               'srcFlowID': integrationFlow.Id,
               'destFlowID': integrationFlow.Id,
-              'destTenantKey': configuration.activeTenantKey,
+              'destTenantKey': destTenantKey,
               'destFlowName': integrationFlow.Name,
               'destPackageID': integrationFlow.PackageId,
             }}
@@ -113,6 +157,7 @@ const TransportIntegrationFlow = ({ integrationFlow, configuration }) => {
               {/* <Input /> */}
               <Select
                 options={tenants}
+                onChange={handleDestTenantChange}
               >
 
 
@@ -122,7 +167,15 @@ const TransportIntegrationFlow = ({ integrationFlow, configuration }) => {
               <Input />
             </Form.Item>
             <Form.Item label="Destination PackageID" name="destPackageID">
-              <Input />
+              <Select
+                options={destPackages.map((destPackage) => {
+                  return {
+                    value: destPackage.Id,
+                    label: destPackage.Id,
+                  }
+                })}
+              />
+              {/* <Input /> */}
             </Form.Item>
 
             <Form.Item

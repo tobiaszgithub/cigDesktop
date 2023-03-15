@@ -8,7 +8,7 @@ export function GetConfigurationFile():Promise<config.ConfigurationFile>;
 
 export function GetFlowsOfIntegrationPackage(arg1:string):Promise<Array<model.IntegrationFlow>>;
 
-export function GetIntegrationPackages():Promise<Array<model.IntegrationPackage>>;
+export function GetIntegrationPackages(arg1:string):Promise<Array<model.IntegrationPackage>>;
 
 export function Greet(arg1:main.Person):Promise<string>;
 
