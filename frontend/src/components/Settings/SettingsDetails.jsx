@@ -2,9 +2,9 @@ import React from "react";
 import { Form, Button, Input, Divider, Select, Radio, Space, message, Spin } from "antd";
 import DynamicField from "./DynamicField"
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { GetConfigurationFile, SaveConfigurationFile } from "../../../wailsjs/go/main/App";
-
+import { ConfigurationContext } from "../../App"
 const defaultFormItemLayout = {
   labelCol: {
     xs: { span: 6 }
@@ -49,10 +49,10 @@ const SettingsDetails = () => {
   const [form] = Form.useForm();
 
   const [messageApi, contextHolder] = message.useMessage();
-
+  const { configuration, setConfiguration } = useContext(ConfigurationContext)
 
   const [isLoading, setIsLoading] = useState(true);
-  const [config, setConfig] = useState({});
+  const [configForm, setConfigForForm] = useState({});
 
   const handleFinish = async (values) => {
     console.log("VALUES", values);
@@ -82,6 +82,8 @@ const SettingsDetails = () => {
           type: "success",
           content: `Configuration Saved.`,
         });
+        setConfiguration(configFile)
+
         setIsLoading(false);
       })
       .catch((error) => {
@@ -99,50 +101,72 @@ const SettingsDetails = () => {
     const getConfiguration = async () => {
 
       setIsLoading(true);
-      GetConfigurationFile()
-        .then((config) => {
-          console.log("configuration file:");
-          console.log(config);
+
+      const configForm = {}
+      configForm.activeTenantKey = configuration.activeTenantKey
+      configForm.fields = configuration.tenants.map((tenant) => {
+        return {
+          tenantKey: tenant.key,
+          apiURL: tenant.apiURL,
+          authorizationType: tenant.authorization.type,
+          username: tenant.authorization.username,
+          password: tenant.authorization.password,
+          clientID: tenant.authorization.clientID,
+          clientSecret: tenant.authorization.clientSecret,
+          tokenURL: tenant.authorization.tokenURL,
+
+        }
+      })
+
+      console.log("new configuration:");
+      console.log(configForm);
+      setConfigForForm(configForm);
+
+      setIsLoading(false);
+      // GetConfigurationFile()
+      //   .then((config) => {
+      //     console.log("configuration file:");
+      //     console.log(config);
 
 
-          const newConfig = {}
-          newConfig.activeTenantKey = config.activeTenantKey
-          newConfig.fields = config.tenants.map((tenant) => {
-            return {
-              tenantKey: tenant.key,
-              apiURL: tenant.apiURL,
-              authorizationType: tenant.authorization.type,
-              username: tenant.authorization.username,
-              password: tenant.authorization.password,
-              clientID: tenant.authorization.clientID,
-              clientSecret: tenant.authorization.clientSecret,
-              tokenURL: tenant.authorization.tokenURL,
+      //     const newConfig = {}
+      //     newConfig.activeTenantKey = config.activeTenantKey
+      //     newConfig.fields = config.tenants.map((tenant) => {
+      //       return {
+      //         tenantKey: tenant.key,
+      //         apiURL: tenant.apiURL,
+      //         authorizationType: tenant.authorization.type,
+      //         username: tenant.authorization.username,
+      //         password: tenant.authorization.password,
+      //         clientID: tenant.authorization.clientID,
+      //         clientSecret: tenant.authorization.clientSecret,
+      //         tokenURL: tenant.authorization.tokenURL,
 
-            }
-          })
+      //       }
+      //     })
 
-          console.log("new configuration:");
-          console.log(newConfig);
-          setConfig(newConfig);
+      //     console.log("new configuration:");
+      //     console.log(newConfig);
+      //     setConfig(newConfig);
 
 
 
-          setIsLoading(false);
-        })
-        .catch((error) => {
-          messageApi.open({
-            type: "error",
-            content: error,
-          });
-          setIsLoading(false);
-        });
+      //     setIsLoading(false);
+      //   })
+      //   .catch((error) => {
+      //     messageApi.open({
+      //       type: "error",
+      //       content: error,
+      //     });
+      //     setIsLoading(false);
+      //   });
 
 
     };
     getConfiguration();
-  }, [])
+  }, [configuration])
 
-  useEffect(() => form.resetFields(), [config]);
+  useEffect(() => form.resetFields(), [configForm]);
 
   const handleChangeAuthorizationType = (value) => {
     console.log(value);
@@ -159,7 +183,7 @@ const SettingsDetails = () => {
           form={form}
           {...defaultFormItemLayout}
           onFinish={handleFinish}
-          initialValues={config}
+          initialValues={configForm}
         >
 
           <Form.Item
@@ -208,14 +232,6 @@ const SettingsDetails = () => {
                         label="authorizationType"
                         rules={[{ required: true }]}
                       >
-                        {/* <Select
-                        labelInValue
-                        onChange={handleChangeAuthorizationType}
-                      >
-                        <Select.Option value="basic">basic</Select.Option>
-                        <Select.Option value="oauth">oauth</Select.Option>
-
-                      </Select> */}
 
                         <Radio.Group>
                           <Radio value={"basic"}>

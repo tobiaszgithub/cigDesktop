@@ -67,6 +67,10 @@ func (a *App) GetIntegrationPackages(tenantKey string) ([]model.IntegrationPacka
 		return []model.IntegrationPackage{}, err
 	}
 	resp, err := cigClient.GetIntegrationPackages(conf)
+	if err != nil {
+		log.Print(err)
+		return []model.IntegrationPackage{}, err
+	}
 
 	return resp.D.Results, err
 }

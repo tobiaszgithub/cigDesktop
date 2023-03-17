@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { GetIntegrationPackages, SetTenantKey } from "../../../wailsjs/go/main/App";
 import { model } from "../../../wailsjs/go/models";
-import { Space, Table, Tag, Spin } from 'antd';
+import { Space, Table, Tag, Spin, message } from 'antd';
 import { Link } from 'react-router-dom';
 import type { ColumnsType } from 'antd/es/table';
 import { useParams } from 'react-router-dom';
@@ -23,6 +23,7 @@ const { Title } = Typography;
 
 
 const IntegrationPackagesTable = () => {
+  const [messageApi, contextHolder] = message.useMessage();
   const { tenantKey } = useParams();
   const [packages, setPackages] = useState(Array<model.IntegrationPackage>);
   const [isLoading, setIsLoading] = useState(true);
@@ -111,10 +112,20 @@ const IntegrationPackagesTable = () => {
     const getPackages = async () => {
       setIsLoading(true);
 
-      await SetTenantKey(tenantKey || '');
-      console.log("IntegrationPackageTables: " + tenantKey)
-      const packages = await GetIntegrationPackages(tenantKey || '');
+      let packages: model.IntegrationPackage[] = [];
+      try {
+        await SetTenantKey(tenantKey || '');
+        console.log("IntegrationPackageTables: " + tenantKey)
+        packages = await GetIntegrationPackages(tenantKey || '');
 
+      } catch (error: any) {
+        console.log("inside catch:")
+        console.log(error)
+        messageApi.open({
+          type: "error",
+          content: error,
+        })
+      }
       setPackages(packages);
 
       setFilters(packages.map((item: { Id: string; }) => {
@@ -134,6 +145,7 @@ const IntegrationPackagesTable = () => {
 
   return (
     <>
+      {contextHolder}
       <Title level={5}>Integration Packages:</Title>
       <Spin tip="Loading" spinning={isLoading}>
         <Table columns={columns} dataSource={packages} pagination={{ pageSize: 50 }} scroll={{ x: 1500 }} />
