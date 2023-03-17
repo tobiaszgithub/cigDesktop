@@ -18,6 +18,7 @@ type transportProps = {
 const TransportIntegrationFlow = ({ integrationFlow, configuration }: transportProps) => {
   const [messageApi, contextHolder] = message.useMessage();
   const [isLoading, setIsLoading] = useState(false);
+  const [transportResponse, setTransportResponse] = useState('');
   const [tenants, setTenants] = useState([]);
   const navigate = useNavigate();
   console.log("TransportIntegraionFlow: ", integrationFlow)
@@ -100,16 +101,18 @@ const TransportIntegrationFlow = ({ integrationFlow, configuration }: transportP
       .then((response) => {
         messageApi.open({
           type: "success",
-          content: `Integrationflow ${transport.srcFlowID} transported successfully. Response: ${response}`,
+          content: `Integrationflow ${transport.srcFlowID} transported successfully.`,
         });
+        setTransportResponse(response);
         setIsLoading(false);
         //navigate("/packages/" + integrationFlow.PackageId);
       })
       .catch((error) => {
         messageApi.open({
           type: "error",
-          content: error,
+          content: `Error during transporting Integration flow ${transport.srcFlowID}`,
         });
+        setTransportResponse(error);
         setIsLoading(false);
       });
     // CreateNewGist(gist, token)
@@ -203,7 +206,9 @@ const TransportIntegrationFlow = ({ integrationFlow, configuration }: transportP
           </Form>
 
         </Card>
-      </Spin>
+        <div>Transport logs:</div>
+        <div style={{ whiteSpace: 'pre-wrap' }}>{transportResponse}</div>
+    </Spin>
     </>
   )
 
