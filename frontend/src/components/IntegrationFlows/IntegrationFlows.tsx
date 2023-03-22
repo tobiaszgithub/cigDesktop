@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { GetFlowsOfIntegrationPackage } from "../../../wailsjs/go/main/App";
-import { Space, Table, Tag, Spin } from 'antd';
+import { Space, Table, Tag, Spin, message } from 'antd';
 import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import type { ColumnsType } from 'antd/es/table';
@@ -12,7 +12,7 @@ type IntegrationFlowsProps = {
 }
 
 const IntegrationFlows = ({ integrationPackageId }: IntegrationFlowsProps) => {
-
+  const [messageApi, contextHolder] = message.useMessage();
   const [flows, setFlows] = useState(Array<model.IntegrationFlow>);
   const [isLoading, setIsLoading] = useState(true);
   const [filters, setFilters] = useState(Array<ColumnFilterItem>)
@@ -100,7 +100,7 @@ const IntegrationFlows = ({ integrationPackageId }: IntegrationFlowsProps) => {
           <Link to={`/tenants/${tenantKey}/packages/${integrationPackageId}/integrationFlows/${record.Id}?action=transport`}>
             Transport
           </Link>
-          
+
         </Space>
       )
     }
@@ -110,11 +110,17 @@ const IntegrationFlows = ({ integrationPackageId }: IntegrationFlowsProps) => {
   useEffect(() => {
     const getFlows = async () => {
       setIsLoading(true);
-
-      const flows = await GetFlowsOfIntegrationPackage(
-        integrationPackageId
-      );
-
+      let flows: model.IntegrationFlow[] = [];
+      try {
+        flows = await GetFlowsOfIntegrationPackage(
+          integrationPackageId
+        );
+      } catch (error: any) {
+        messageApi.open({
+          type: "error",
+          content: error,
+        })
+      }
       setFlows(flows);
 
       setFilters(flows.map(item => {
@@ -134,6 +140,7 @@ const IntegrationFlows = ({ integrationPackageId }: IntegrationFlowsProps) => {
 
   return (
     <>
+      {contextHolder}
       <Spin tip="Loading" spinning={isLoading}>
         <Table columns={columns} dataSource={flows} pagination={{ pageSize: 50 }} />
       </Spin>
