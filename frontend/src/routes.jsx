@@ -12,7 +12,7 @@ const routes = [
     path: "/",
     element: <App />,
     children: [
-      { index: true, element: <IntegrationPackagesTable /> },
+      { index: true, element: <StartPage /> },
       {
         path: "/settings",
         element: <SettingsDetails />,
