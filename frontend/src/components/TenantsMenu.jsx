@@ -1,6 +1,7 @@
 import { LockOutlined, UnlockOutlined, ApiOutlined, SettingOutlined, HomeOutlined } from "@ant-design/icons";
 import { Layout, Menu } from "antd";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
 import logo from "../assets/images/logo-universal.png";
 
 function getItem(label, key, icon, children, type) {
@@ -15,7 +16,31 @@ function getItem(label, key, icon, children, type) {
 
 
 const TenantsMenu = ({ configuration }) => {
+  let location = useLocation();
+  const [current, setCurrent] = useState(
+    location.pathname === "/" || location.pathname === ""
+      ? "/start"
+      : location.pathname,
+  );
+  console.log("location.pathname: " + location.pathname)
+  console.log("current: " + current)
 
+  useEffect(() => {
+    console.log("useEffect: location.pathname: " + location.pathname)
+    console.log("useEffect: current: " + current)
+    if (location) {
+      if (current !== location.pathname) {
+        if (location.pathname.startsWith("/tenants")) {
+          let tenantPath = location.pathname.split("/")
+          console.log(tenantPath)
+          setCurrent(tenantPath.slice(0,3).join("/"))
+        } else {
+          setCurrent(location.pathname);
+        }
+
+      }
+    }
+  }, [location, current]);
 
   console.log("TenantMenu: Configuration: ")
   console.log(configuration)
@@ -23,8 +48,8 @@ const TenantsMenu = ({ configuration }) => {
   if (configuration['tenants']) {
     tenants = configuration.tenants.map((tenant) => {
       return getItem(
-        <Link to={`tenants/${tenant.key}`}>{tenant.key}</Link>,
-        tenant.key
+        <Link to={`/tenants/${tenant.key}`}>{tenant.key}</Link>,
+        `/tenants/${tenant.key}`
 
       )
     })
@@ -34,12 +59,12 @@ const TenantsMenu = ({ configuration }) => {
   const items = [
     getItem(
       <Link to={"/start"}>Start</Link>,
-      "start",
+      "/start",
       <HomeOutlined />,
       null),
     getItem(
       <Link to={"/settings"}>Settings</Link>,
-      "settings",
+      "/settings",
       <SettingOutlined />,
       null),
     getItem("Tenants", "tenants", <ApiOutlined />, tenants),
@@ -56,6 +81,7 @@ const TenantsMenu = ({ configuration }) => {
         items={items}
         style={{ width: 256 }}
         defaultOpenKeys={['tenants']}
+        selectedKeys={[current]}
       />
     </Layout.Sider>
   );
