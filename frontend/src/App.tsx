@@ -1,14 +1,10 @@
-import logo from './assets/images/logo-universal.png';
-import { main } from "../wailsjs/go/models";
-
-import NavBar from "./components/NavBar";
 import { FloatButton, Layout, message, Spin } from "antd";
 import { Outlet } from "react-router-dom";
 import BreadCrumb from './components/BreadCrumb';
 import TenantsMenu from './components/TenantsMenu';
 import { useEffect, useState, createContext, useContext } from "react";
 import { GetConfigurationFile } from "../wailsjs/go/main/App";
-import { model, config } from "../wailsjs/go/models";
+import { config } from "../wailsjs/go/models";
 
 
 const { Content } = Layout;
