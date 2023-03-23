@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "@ant-design/icons": "^5.0.1",
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
+    "@mui/material": "^5.11.10",
+    "antd": "^5.2.2",
+    "prismjs": "^1.29.0",
+    "react-router-dom": "^6.8.1"
+  }
+}
