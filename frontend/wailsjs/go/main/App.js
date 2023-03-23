@@ -14,10 +14,6 @@ export function GetIntegrationPackages(arg1) {
   return window['go']['main']['App']['GetIntegrationPackages'](arg1);
 }
 
-export function Greet(arg1) {
-  return window['go']['main']['App']['Greet'](arg1);
-}
-
 export function InspectFlow(arg1) {
   return window['go']['main']['App']['InspectFlow'](arg1);
 }

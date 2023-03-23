@@ -1,5 +1,4 @@
 import logo from './assets/images/logo-universal.png';
-import { Greet } from "../wailsjs/go/main/App";
 import { main } from "../wailsjs/go/models";
 import DataGrid from './components/IntegrationPackages/DataGrid';
 

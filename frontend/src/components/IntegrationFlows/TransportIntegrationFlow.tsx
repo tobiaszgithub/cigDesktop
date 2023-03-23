@@ -33,18 +33,9 @@ const TransportIntegrationFlow = ({ integrationFlow, configuration }: transportP
 
     setIsLoading(true);
 
-    //await SetTenantKey(destTenantKey || '');
     const packages = await GetIntegrationPackages(destTenantKey);
 
     setDestPackages(packages);
-
-    // setFilters(packages.map((item: { Id: string; }) => {
-    //   const key = item.Id.split(' ')[0]
-    //   return {
-    //     text: key,
-    //     value: key
-    //   }
-    // }))
 
     setIsLoading(false);
     console.log("integraion packages:")
@@ -67,13 +58,6 @@ const TransportIntegrationFlow = ({ integrationFlow, configuration }: transportP
 
   }
 
-  // const tenants = configuration.tenants.map((tenant) => {
-  //   return {
-  //     value: tenant.key,
-  //     label: tenant.key
-  //   }
-  // })
-
   const onFinish = async (values: { description: string; isPublic: string; srcFlowID: string; destFlowID: string; destTenantKey: string; destFlowName: string; destPackageID: string; }) => {
     const { description, isPublic, srcFlowID, destFlowID, destTenantKey, destFlowName, destPackageID } = values;
     setIsLoading(true);
@@ -87,16 +71,6 @@ const TransportIntegrationFlow = ({ integrationFlow, configuration }: transportP
     };
     console.log("transport: ", transport)
 
-    //func (a *App) TransportFlow(srcFlowID string, 
-    //destFlowID string, destTenantKey string, destFlowName string, 
-    //destPackageID string)
-    // messageApi.open({
-    //   type: "error",
-    //   content: "test error content",
-    // })
-
-
-    //form.resetFields()
     TransportFlow(transport.srcFlowID, transport.destFlowID, transport.destTenantKey,
       transport.destFlowName, transport.destPackageID)
       .then((response) => {
@@ -116,20 +90,6 @@ const TransportIntegrationFlow = ({ integrationFlow, configuration }: transportP
         setTransportResponse(error);
         setIsLoading(false);
       });
-    // CreateNewGist(gist, token)
-    //   .then((gist) => {
-    //     messageApi.open({
-    //       type: "success",
-    //       content: `Gist ${gist.id} created successfully`,
-    //     });
-    //     navigate("/gists/private");
-    //   })
-    //   .catch((error) => {
-    //     messageApi.open({
-    //       type: "error",
-    //       content: error,
-    //     });
-    //   });
   };
 
   const onFinishFailed = (errorInfo: any) => {
