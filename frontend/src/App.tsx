@@ -1,6 +1,5 @@
 import logo from './assets/images/logo-universal.png';
 import { main } from "../wailsjs/go/models";
-import DataGrid from './components/IntegrationPackages/DataGrid';
 
 import NavBar from "./components/NavBar";
 import { FloatButton, Layout, message, Spin } from "antd";

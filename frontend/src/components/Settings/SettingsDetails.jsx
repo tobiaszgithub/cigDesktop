@@ -14,37 +14,6 @@ const defaultFormItemLayout = {
   }
 };
 
-
-const initialValue2 = {
-  activeTenantKey: "cloud-foundry-dev-basic",
-  fields: [
-
-    {
-      tenantKey: 'hic-neo-dev',
-      apiURL: "https://p700122-tmn.hci.eu2.hana.ondemand.com/api/v1",
-      authorizationType: 'basic',
-      username: 'user1',
-      password: 'pass1',
-      clientID: '',
-      clientSecret: '',
-      tokenURL: ''
-    },
-    {
-      tenantKey: 'cloud-foundry-dev-basic',
-      apiURL: "https://1faaaaectrial.it-cpitrial03.cfapps.ap21.hana.ondemand.com/api/v1",
-      authorizationType: 'oauth',
-      username: '',
-      password: '',
-      clientID: 'sb-4ab40f08-7a88-4703',
-      clientSecret: 'c3ff56d3-aebe-4452-b6f',
-      tokenURL: 'https://1fectrial.authentication.ap21.com'
-
-
-    },
-
-
-  ]
-}
 const SettingsDetails = () => {
   const [form] = Form.useForm();
 
@@ -123,55 +92,11 @@ const SettingsDetails = () => {
       setConfigForForm(configForm);
 
       setIsLoading(false);
-      // GetConfigurationFile()
-      //   .then((config) => {
-      //     console.log("configuration file:");
-      //     console.log(config);
-
-
-      //     const newConfig = {}
-      //     newConfig.activeTenantKey = config.activeTenantKey
-      //     newConfig.fields = config.tenants.map((tenant) => {
-      //       return {
-      //         tenantKey: tenant.key,
-      //         apiURL: tenant.apiURL,
-      //         authorizationType: tenant.authorization.type,
-      //         username: tenant.authorization.username,
-      //         password: tenant.authorization.password,
-      //         clientID: tenant.authorization.clientID,
-      //         clientSecret: tenant.authorization.clientSecret,
-      //         tokenURL: tenant.authorization.tokenURL,
-
-      //       }
-      //     })
-
-      //     console.log("new configuration:");
-      //     console.log(newConfig);
-      //     setConfig(newConfig);
-
-
-
-      //     setIsLoading(false);
-      //   })
-      //   .catch((error) => {
-      //     messageApi.open({
-      //       type: "error",
-      //       content: error,
-      //     });
-      //     setIsLoading(false);
-      //   });
-
-
     };
     getConfiguration();
   }, [configuration])
 
   useEffect(() => form.resetFields(), [configForm]);
-
-  const handleChangeAuthorizationType = (value) => {
-    console.log(value);
-
-  };
 
   return (
     <>

@@ -1,6 +1,4 @@
 import App from "./App";
-
-import IntegrationPackages from "./components/IntegrationPackages/IntegrationPackages";
 import IntegrationFlowDetails from "./components/IntegrationFlows/IntegrationFlowDetails";
 import IntegrationPackagesTable from "./components/IntegrationPackages/IntegrationPackagesTable";
 import IntegrationPackageDetailsWithParam from "./components/IntegrationPackages/IntegrationPackageDetailsWithParam";
