@@ -1,6 +1,15 @@
 # README
 
 ## About
+Using this app it is possible to manage and query Cloud Integration artifacts of design time and runtime.
+At the moment, this application solves the problem of transferring/transporting integration flows between different tenants. The application can also be used to move iflow in the same tenant.
+
+The main advantages of using the app:
+- When you do an iflow transport – no need to create configuration parameters from scratch.
+- When you do an iflow transport for the first time to target system – the configuration parameters are taken from source system
+- The transported integration is transferred as a new version to the target system. You have access to earlier versions.
+- It is possible to change the Id and Name of the iflow during transport.
+- intuitive interface
 
 ## Live Development
 
