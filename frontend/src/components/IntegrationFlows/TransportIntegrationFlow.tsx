@@ -16,7 +16,7 @@ type transportProps = {
 }
 
 const TransportIntegrationFlow = ({ integrationFlow, configuration }: transportProps) => {
-  
+
   const [messageApi, contextHolder] = message.useMessage();
   const [isLoading, setIsLoading] = useState(false);
   const [transportResponse, setTransportResponse] = useState('');
@@ -32,9 +32,15 @@ const TransportIntegrationFlow = ({ integrationFlow, configuration }: transportP
   const getPackages = async () => {
 
     setIsLoading(true);
-
-    const packages = await GetIntegrationPackages(destTenantKey);
-
+    let packages: model.IntegrationPackage[] = [];
+    try {
+      packages = await GetIntegrationPackages(destTenantKey);
+    } catch (error: any) {
+      messageApi.open({
+        type: "error",
+        content: error,
+      })
+    }
     setDestPackages(packages);
 
     setIsLoading(false);
@@ -169,7 +175,7 @@ const TransportIntegrationFlow = ({ integrationFlow, configuration }: transportP
         </Card>
         <div>Transport logs:</div>
         <div style={{ whiteSpace: 'pre-wrap' }}>{transportResponse}</div>
-    </Spin>
+      </Spin>
     </>
   )
 

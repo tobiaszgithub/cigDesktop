@@ -111,10 +111,10 @@ const SettingsDetails = () => {
           initialValues={configForm}
         >
 
-          <Form.Item
+          <Form.Item style={{ display: 'none' }}
             name="activeTenantKey"
             label="Active Tenant Key"
-            rules={[{ required: true }]}
+            rules={[{ required: false }]}
           >
             <Input />
           </Form.Item>
@@ -203,7 +203,7 @@ const SettingsDetails = () => {
                         label="clientSecret"
                         rules={[{ required: false }]}
                       >
-                        <Input placeholder="clientSecret" />
+                        <Input.Password placeholder="clientSecret" />
                       </Form.Item>
 
                       <Form.Item
@@ -239,7 +239,7 @@ const SettingsDetails = () => {
                     <Button
                       type="dashed"
                       onClick={() => add()}
-                      style={{ width: "60%" }}
+                      style={{ width: "50%" }}
                     >
                       <PlusOutlined /> Add Tenant
                     </Button>
@@ -255,8 +255,8 @@ const SettingsDetails = () => {
 
 
           <Form.Item>
-            <Button type="primary" htmlType="submit">
-              Submit
+            <Button type="primary" htmlType="submit" style={{ width: "50%" }}>
+              Save
             </Button>
           </Form.Item>
         </Form>

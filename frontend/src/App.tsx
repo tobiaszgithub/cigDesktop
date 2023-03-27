@@ -14,7 +14,13 @@ interface IConfigurationContext {
   setConfiguration: (configuration: config.ConfigurationFile) => void
 }
 
-export const ConfigurationContext = createContext<IConfigurationContext | null>(null);
+const defaultConfig = new config.ConfigurationFile();
+defaultConfig.tenants = [];
+
+export const ConfigurationContext = createContext<IConfigurationContext | null>({
+  configuration: defaultConfig,
+  setConfiguration: () => { }
+});
 
 const App = () => {
   const tenants: Array<config.Configuration> = [new config.Configuration()];
@@ -38,6 +44,9 @@ const App = () => {
             type: "error",
             content: error,
           });
+
+
+          setConfiguration(defaultConfig);
           setIsLoading(false);
         });
     }
@@ -57,11 +66,13 @@ const App = () => {
           minHeight: "100vh",
         }}
       >
+        {contextHolder}
         {/* <NavBar /> */}
+
         <Spin tip="Loading" spinning={isLoading}>
           <Layout>
             <TenantsMenu configuration={configuration} />
-            <Layout className="site-layout">
+            <Layout className="site-layout" style={{ height: "100vh" }}>
               <BreadCrumb />
               <Content
                 style={{

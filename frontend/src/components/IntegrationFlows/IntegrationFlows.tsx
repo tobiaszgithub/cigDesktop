@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { GetFlowsOfIntegrationPackage } from "../../../wailsjs/go/main/App";
-import { Space, Table, Tag, Spin, message } from 'antd';
+import { Space, Table, Tag, Spin, message, Button } from 'antd';
 import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import type { ColumnsType } from 'antd/es/table';
 import { model } from "../../../wailsjs/go/models";
 import { ColumnFilterItem } from "antd/es/table/interface";
+import { PullRequestOutlined, SendOutlined } from "@ant-design/icons";
 
 type IntegrationFlowsProps = {
   integrationPackageId: string,
@@ -20,6 +21,21 @@ const IntegrationFlows = ({ integrationPackageId }: IntegrationFlowsProps) => {
 
   const columns: ColumnsType<model.IntegrationFlow> = [
     {
+      title: 'Action',
+      key: 'action',
+      render: (_, record) => (
+        <Space size="middle">
+          {/* <a>Invite {record.}</a> */}
+          <Button type="default" size="middle">
+            <Link to={`/tenants/${tenantKey}/packages/${integrationPackageId}/integrationFlows/${record.Id}?action=transport`}>
+               Transport <PullRequestOutlined />
+            </Link>
+          </Button>
+
+        </Space>
+      )
+    },
+    {
       title: 'Id',
       dataIndex: 'Id',
       key: 'id',
@@ -33,6 +49,7 @@ const IntegrationFlows = ({ integrationPackageId }: IntegrationFlowsProps) => {
       filterSearch: true,
       onFilter: (value, record) => record.Id.indexOf(value as string) === 0,
     },
+
     {
       title: 'Name',
       dataIndex: 'Name',
@@ -90,20 +107,8 @@ const IntegrationFlows = ({ integrationPackageId }: IntegrationFlowsProps) => {
       dataIndex: 'Description',
       key: 'description',
       ellipsis: true,
-    },
-    {
-      title: 'Action',
-      key: 'action',
-      render: (_, record) => (
-        <Space size="middle">
-          {/* <a>Invite {record.}</a> */}
-          <Link to={`/tenants/${tenantKey}/packages/${integrationPackageId}/integrationFlows/${record.Id}?action=transport`}>
-            Transport
-          </Link>
-
-        </Space>
-      )
     }
+
 
   ];
 
